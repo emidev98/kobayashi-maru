@@ -1,0 +1,44 @@
+{
+  "name": "kobayashi-maru",
+  "version": "1.0.0",
+  "description": "Wealth transfer from BTC protocol to Exchange",
+  "main": "src/index.ts",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start:dev": "nodemon",
+    "start:prod": "npm run build && node build/index.js",
+    "test": "npx jest",
+    "build": "rimraf ./build && tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emidev98/kobayashi-maru.git"
+  },
+  "keywords": [
+    "BTC",
+    "Exchange"
+  ],
+  "author": "Emilian Harastasan",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/emidev98/kobayashi-maru/issues"
+  },
+  "homepage": "https://github.com/emidev98/kobayashi-maru#readme",
+  "dependencies": {
+    "@types/bitcoinjs-lib": "^5.0.0",
+    "bitcoinjs-lib": "^6.0.1",
+    "jest": "^27.4.4",
+    "mongodb": "^4.2.1",
+    "typescript": "^4.5.3"
+  },
+  "devDependencies": {
+    "@types/dotenv": "^8.2.0",
+    "@types/node": "^16.11.12",
+    "dotenv": "^10.0.0",
+    "nodemon": "^2.0.15",
+    "rimraf": "^3.0.2",
+    "ts-node": "^10.4.0"
+  }
+}
