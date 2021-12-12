@@ -11,17 +11,18 @@ These instructions do not specify every single detail you should take into consi
 **Note**: A deposit is considered valid when it has at least 6 confirmations.
 
 Known customer addresses are:
-* Wesley Crusher: mvd6qFeVkqH6MNAS2Y2cLifbdaX5XUkbZJ
-* Leonard McCoy: mmFFG4jqAtw9MoCC88hw5FNfreQWuEHADp
-* Jonathan Archer: mzzg8fvHXydKs8j9D2a8t7KpSXpGgAnk4n
-* Jadzia Dax: 2N1SP7r92ZZJvYKG2oNtzPwYnzw62up7mTo
-* Montgomery Scott: mutrAf4usv3HKNdpLwVD4ow2oLArL6Rez8
-* James T. Kirk: miTHhiX3iFhVnAEecLjybxvV5g8mKYTtnM
-* Spock: mvcyJMiAcSXKAEsQxbW9TYZ369rsMG6rVV
+
+-   Wesley Crusher: mvd6qFeVkqH6MNAS2Y2cLifbdaX5XUkbZJ
+-   Leonard McCoy: mmFFG4jqAtw9MoCC88hw5FNfreQWuEHADp
+-   Jonathan Archer: mzzg8fvHXydKs8j9D2a8t7KpSXpGgAnk4n
+-   Jadzia Dax: 2N1SP7r92ZZJvYKG2oNtzPwYnzw62up7mTo
+-   Montgomery Scott: mutrAf4usv3HKNdpLwVD4ow2oLArL6Rez8
+-   James T. Kirk: miTHhiX3iFhVnAEecLjybxvV5g8mKYTtnM
+-   Spock: mvcyJMiAcSXKAEsQxbW9TYZ369rsMG6rVV
 
 ## Requirements
 
-Build a dockerized Node.js application to process the two transaction sets. 
+Build a dockerized Node.js application to process the two transaction sets.
 
 If you're not comfortable with Node.js, feel free to use the language of your choice.
 
@@ -44,7 +45,7 @@ The command `docker-compose up` **MUST**:
     ```
 
     The numbers in lines 1 - 7 **MUST** contain the count of valid deposits and their sum for the respective customer.
-    
+
     The numbers in line 8 **MUST** be the count and the sum of the valid deposits to addresses that are not associated with a known customer.
 
     **Note**: We'll match for these 10 lines with regular expressions. Please stick to this exact template, otherwise it won't be detected.

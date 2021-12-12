@@ -3,14 +3,11 @@ import Customer from "../models/Customer";
 import MongoDBRepository from "./MongoDBRepository";
 
 export default class CustomersRepository extends MongoDBRepository {
-    public COLLECTION: string = "customers";
+	public COLLECTION = "customers";
 
-    getCustomers = async () : Promise<WithId<Customer[]>> => {
-        const customers = (await this.connect())
-            .collection(this.COLLECTION)
-            .find({})
-            .toArray();
+	getCustomers = async (): Promise<WithId<Customer[]>> => {
+		const customers = (await this.connect()).collection(this.COLLECTION).find({}).toArray();
 
-        return customers as Promise<WithId<Customer[]>>;
-    }
+		return customers as Promise<WithId<Customer[]>>;
+	};
 }

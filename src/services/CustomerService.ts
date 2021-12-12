@@ -6,10 +6,10 @@ import CustomersRepository from "../repository/CustomersRepository";
 import TransactionsRepository from "../repository/TransactionsRepository";
 
 export default class CustomerService {
-    customersRepository = new CustomersRepository();
-    transactionsService = new TransactionsRepository();
+	customersRepository = new CustomersRepository();
+	transactionsService = new TransactionsRepository();
 
-    /*
+	/*
         Extract all customers from DB. Based on these customers
         extract all transactions associated to they wallet (on parallel).
         
@@ -18,49 +18,50 @@ export default class CustomerService {
 
         Finally join the Deposit object and return it.
     */
-    async getCustomersDeposits() : Promise<Array<Deposit>> {
-        const customers = await this.customersRepository.getCustomers();
-        const depositsForKnownCustomers = await this.getDepositsForKnownCustomers(customers);
-        const depositForUnknownCustomers = await this.getDepositsForUnknownCustomers(customers);
+	async getCustomersDeposits(): Promise<Array<Deposit>> {
+		const customers = await this.customersRepository.getCustomers();
+		const depositsForKnownCustomers = await this.getDepositsForKnownCustomers(customers);
+		const depositForUnknownCustomers = await this.getDepositsForUnknownCustomers(customers);
 
-        const deposits = depositsForKnownCustomers;
-        deposits.push(depositForUnknownCustomers);
-        
-        return deposits
-    }
+		const deposits = depositsForKnownCustomers;
+		deposits.push(depositForUnknownCustomers);
 
-    private async getDepositsForKnownCustomers(customers : WithId<Customer[]>){
-        const deposits = new Array<Deposit>();
+		return deposits;
+	}
 
-        const transactionsGroupedByCustomer = await Promise.all(_.map(customers, async (customer)=> {
-            return await this.transactionsService.getTransactionsByAddress(customer.address);
-        }));
-        
-        _.forEach(transactionsGroupedByCustomer, transactions => {
-            const deposit = new Deposit();
+	private async getDepositsForKnownCustomers(customers: WithId<Customer[]>) {
+		const deposits = new Array<Deposit>();
 
-            _.forEach(transactions, transaction => {
-                deposit.walletBalanceFromTransaction(transaction);
-            });
+		const transactionsGroupedByCustomer = await Promise.all(
+			_.map(customers, async (customer) => {
+				return await this.transactionsService.getTransactionsByAddress(customer.address);
+			})
+		);
 
-            deposit.customer = _.find(customers, customer => transactions[0].address === customer.address);
+		_.forEach(transactionsGroupedByCustomer, (transactions) => {
+			const deposit = new Deposit();
 
-            deposits.push(deposit);
-        });
+			_.forEach(transactions, (transaction) => {
+				deposit.walletBalanceFromTransaction(transaction);
+			});
 
-        return deposits;
-    }
+			deposit.customer = _.find(customers, (customer) => transactions[0].address === customer.address);
 
-    private async getDepositsForUnknownCustomers(customers : WithId<Customer[]>){
-        const knownCustomersAddresses = _.map(customers,'address');
-        const transactions = await this.transactionsService.getTransactionsExcludingByAddress(knownCustomersAddresses);
-        const deposit = new Deposit();
-        
-        _.forEach(transactions,transaction =>{
-            if(transaction.category === "receive")
-                deposit.walletBalanceFromTransaction(transaction);
-        })
+			deposits.push(deposit);
+		});
 
-        return deposit
-    }
+		return deposits;
+	}
+
+	private async getDepositsForUnknownCustomers(customers: WithId<Customer[]>) {
+		const knownCustomersAddresses = _.map(customers, "address");
+		const transactions = await this.transactionsService.getTransactionsExcludingByAddress(knownCustomersAddresses);
+		const deposit = new Deposit();
+
+		_.forEach(transactions, (transaction) => {
+			if (transaction.category === "receive") deposit.walletBalanceFromTransaction(transaction);
+		});
+
+		return deposit;
+	}
 }
