@@ -2,11 +2,15 @@ version: "3.8"
 
 services:
   app:
-    image: node:lts-bullseye
+    build: .
     environment:
-      DB_URL: "mongbodb"
+      DB_URL: "mongodb://db:27017"
     depends_on:
       - "db"
+    volumes:
+      - .:/usr/src
+      - /usr/src/node_modules
+
   db:
     image: bitnami/mongodb:5.0.5
     environment:
