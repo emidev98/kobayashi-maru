@@ -9,7 +9,7 @@
   "scripts": {
     "start:dev": "nodemon",
     "start:prod": "npm run build && node build/index.js",
-    "test": "npx jest",
+    "test": "jest --config jest.config.ts",
     "build": "rimraf ./build && tsc",
     "migrate:status": "migrate-mongo status",
     "migrate:down": "migrate-mongo down",
@@ -36,10 +36,12 @@
   },
   "devDependencies": {
     "@types/dotenv": "^8.2.0",
+    "@types/jest": "^27.0.3",
     "@types/lodash": "^4.14.178",
     "@types/node": "^16.11.12",
+		"jest": "26.6.0",
+		"ts-jest": "^26.5.6",
     "dotenv": "^10.0.0",
-    "jest": "^27.4.4",
     "migrate-mongo": "^8.2.3",
     "nodemon": "^2.0.15",
     "rimraf": "^3.0.2",

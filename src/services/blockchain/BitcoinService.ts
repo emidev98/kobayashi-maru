@@ -1,4 +1,4 @@
-import { ListSinceBlock } from "../models/ListSinceBlock";
+import { ListSinceBlock } from "../../models/ListSinceBlock";
 import BlockchainMock from "./BlockchainServiceMock";
 
 export default class BitcoinService {

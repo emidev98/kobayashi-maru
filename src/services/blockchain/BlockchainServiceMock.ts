@@ -1,11 +1,11 @@
 import { readFileSync } from "fs";
 import path from "path";
-import { ListSinceBlock } from "../models/ListSinceBlock";
+import { ListSinceBlock } from "../../models/ListSinceBlock";
 import BlockchainService from "./BlockchainService";
 
 export default class BlockchainMock implements BlockchainService {
 
-    URL = "./../../mocks";
+    URL = "./../../../mocks";
 
     public async listSinceBlock(blockHash: string) : Promise<ListSinceBlock> {
         const fileUrl = `${this.URL}/listsinceblock/${blockHash}.json`

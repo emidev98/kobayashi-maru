@@ -1,15 +1,19 @@
 import { ListSinceBlock } from "../models/ListSinceBlock";
 import Transaction from "../models/Transaction";
-import BitcoinService from "../services/BitcoinService";
+import BitcoinService from "../services/blockchain/BitcoinService";
 import TransactionsRepository from "../repository/TransactionsRepository";
-import _, { isEqual, update } from "lodash";
+import _ from "lodash";
 
 
 export default class BlockchainsController {
     
     bitcoinService = new BitcoinService();
-    transactionsRepository = new TransactionsRepository();
+    _transactionsRepository = new TransactionsRepository();
     MIN_CONFIRMATIONS = 6;
+
+    getTransactionsFromRepository = this._transactionsRepository.getTransactionsById;
+    getSmallestTransactionFromRepository = this._transactionsRepository.getSmallestTransactionFromRepository;
+    getLargestTransactionFromRepository = this._transactionsRepository.getLargestTransactionFromRepository;
 
     /*  Hardcoded blockHashes can be replaced with values send
         from RPC, DB, service, frontend..*/
@@ -21,17 +25,13 @@ export default class BlockchainsController {
 
         return this.parseTransactionsList(listSinceBlock);
     }
-
-    async getTransactionsFromRepository(transactionsIds : Array<string>) {
-        return await this.transactionsRepository.getTransactionsById(transactionsIds);
-    }
-
-    /* When txsids already exists on DB is a good practice to update relevant data
-    like confirmations instead of duplicate unnecessary entries*/
+    
+    /* When txsids already exists on DB, this function update 
+    relevant data like nº of confirmations instead of duplicate unnecessary entries*/
     async storeTransactions(transactions : Array<Transaction>) {
         const transactionsId = _.map(transactions, transaction => transaction.txid);
         let transactionsToInsert = transactions;
-        let transactionsToUpdate = await this.transactionsRepository.getTransactionsById(transactionsId);
+        let transactionsToUpdate = await this._transactionsRepository.getTransactionsById(transactionsId);
         
         if(!_.isEmpty(transactionsToUpdate)){
 
@@ -43,8 +43,8 @@ export default class BlockchainsController {
             });
 
             // Try to update transactions on parallel by id. If its updated return undefined otherwise return the TX
-            const transactionsAfterUpdate = await Promise.all(_.map(transactionsToUpdate,async (transaction) => {
-                const updateResult = await this.transactionsRepository.updateTransaction(transaction);
+            const transactionsAfterUpdate = await Promise.all(_.map(transactionsToUpdate, async (transaction) => {
+                const updateResult = await this._transactionsRepository.updateTransaction(transaction);
 
                 if(updateResult.modifiedCount > 0) return undefined;
                 else return transaction;
@@ -55,7 +55,7 @@ export default class BlockchainsController {
         
         // Insert the transactions that were never stored on DB
         if(!_.isEmpty(transactionsToInsert)) {
-            await this.transactionsRepository.insertTransaction(transactionsToInsert);
+            await this._transactionsRepository.insertTransaction(transactionsToInsert);
         }
     }
 

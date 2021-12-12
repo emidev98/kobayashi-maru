@@ -1,4 +1,4 @@
-import { ListSinceBlock } from "../models/ListSinceBlock";
+import { ListSinceBlock } from "../../models/ListSinceBlock";
 
 export default interface BlockchainService {
     URL : string;
