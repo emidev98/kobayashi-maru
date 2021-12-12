@@ -5,6 +5,7 @@ services:
     build: .
     environment:
       DB_URL: "mongodb://db:27017"
+      DB_NAME: "kobayashiMaru"
     depends_on:
       - "db"
     volumes:
